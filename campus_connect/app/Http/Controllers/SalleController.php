@@ -13,6 +13,8 @@ class SalleController extends Controller
     public function index()
     {
         //
+        Salle::all();
+        
     }
 
     /**

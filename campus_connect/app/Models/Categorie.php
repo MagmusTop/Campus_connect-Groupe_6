@@ -6,5 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categorie extends Model
 {
-    //
+    protected $fillable = [
+        'nom',
+    ];
+
+    public function annonces()
+    {
+        return $this->hasMany(Annonce::class);
+    }
+
+    public function equipements()
+    {
+        return $this->hasMany(Equipement::class);
+    }
 }
+

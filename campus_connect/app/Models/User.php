@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Models\Role;
+use App\Models\Annonce;
+use App\Models\Reservation;
+use App\Models\Etudiant;
+use App\Models\Enseignant;
+use App\Models\Administrateur;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -19,7 +26,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'role_id',
-        'name',
+        'nom',
+        'prenom',
         'email',
         'password',
     ];
@@ -45,5 +53,35 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function annonces()
+    {
+        return $this->hasMany(Annonce::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    // Profils 1:1
+    public function etudiant()
+    {
+        return $this->hasOne(Etudiant::class, 'user_id');
+    }
+
+    public function enseignant()
+    {
+        return $this->hasOne(Enseignant::class, 'user_id');
+    }
+
+    public function administrateur()
+    {
+        return $this->hasOne(Administrateur::class, 'user_id');
     }
 }
