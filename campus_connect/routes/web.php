@@ -27,27 +27,29 @@ Route::middleware('auth')->group(function () {
         Route::patch('/', [ProfileController::class, 'update'])->name('update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
+
+    Route::prefix('reservations')->name('reservations.')->group(function () {
+        Route::get('/', [ReservationController::class, 'index'])->name('index');
+        Route::get('/create', [ReservationController::class, 'create'])->name('create');
+        Route::post('/', [ReservationController::class, 'store'])->name('store');
+        Route::get('/{reservation}', [ReservationController::class, 'show'])->name('show');
+        Route::get('/{reservation}/edit', [ReservationController::class, 'edit'])->name('edit');
+        Route::put('/{reservation}', [ReservationController::class, 'update'])->name('update');
+        Route::delete('/{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
+    });
+
 });
 
 Route::prefix('salles')->name('salles.')->group(function () {
     Route::get('/', [SalleController::class, 'index'])->name('index');
-    Route::get('/{salle}', [SalleController::class, 'show'])->name('show');
     Route::get('/create', [SalleController::class, 'create'])->name('create');
+    Route::get('/{salle}', [SalleController::class, 'show'])->name('show');
     Route::get('/{salle}/edit', [SalleController::class, 'edit'])->name('edit');
-    Route::post('/', [SalleController::class, 'store'])->name('store');
     Route::put('/{salle}', [SalleController::class, 'update'])->name('update');
+    Route::post('/', [SalleController::class, 'store'])->name('store');
     Route::delete('/{salle}', [SalleController::class, 'destroy'])->name('destroy');
 });
 
-Route::prefix('reservations')->name('reservations.')->group(function () {
-    Route::get('/', [ReservationController::class, 'index'])->name('index');
-    Route::get('/{reservation}', [ReservationController::class, 'show'])->name('show');
-    Route::get('/create', [ReservationController::class, 'index'])->name('create');
-    Route::get('/{reservation}/edit', [ReservationController::class, 'edit'])->name('edit');
-    Route::post('/', [ReservationController::class, 'store'])->name('store');
-    Route::put('/{reservation}', [ReservationController::class, 'update'])->name('update');
-    Route::delete('/{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
-});
 
 Route::prefix('equipements')->name('equipements.')->group(function () {
     Route::get('/', [EquipementController::class, 'index'])->name('index');

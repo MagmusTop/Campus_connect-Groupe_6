@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Equipement;
 use App\Models\Reservation;
+use App\Models\Salle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,7 +26,9 @@ class ReservationController extends Controller
     public function create()
     {
         //
-        return view('reservations.create');
+        $sales=Salle::all();
+        $equipements = Equipement::all();
+        return view('reservations.create', compact('sales','equipements'));
     }
 
     /**
@@ -34,12 +38,25 @@ class ReservationController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'salle_id' => 'required|exists:salles,id',
-            'date_reservation' => 'required|date',
-            'heure_debut' => 'required|date_format:H:i',
-            'heure_fin' => 'required|date_format:H:i|after:heure_debut',
+            'salle_id' => 'nullable',
+            "equipement_id" => "nullable",
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:heure_debut',
             'motif' => 'nullable|string|max:255',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $reservation = new Reservation();
+        $reservation->salle_id = $request->input('salle_id');
+        $reservation->date_debut = $request->input('date_reservation') . ' ' . $request->input('heure_debut');
+        $reservation->date_fin = $request->input('date_reservation') . ' ' . $request->input('heure_fin');
+        $reservation->motif = $request->input('motif');
+        $reservation->statut = 'en_attente';
+        
+        return redirect()->route('reservations.index')->with('success', 'Réservation créée avec succès et en attente de validation.');
     }
 
     /**
