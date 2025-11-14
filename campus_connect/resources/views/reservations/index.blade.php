@@ -13,7 +13,7 @@
         </a>
     </div>
 
-    @php
+   <!--
         $reservations = collect([
             (object)[
                 'id' => 1,
@@ -35,15 +35,15 @@
             ],
             (object)[
                 'id' => 3,
-                'statut' => 'rejetée',
+         p--    'statut' => 'rejetée',
                 'salle' => null,
                 'equipement' => (object)['nom' => 'Vidéoprojecteur HD'],
                 'date_debut' => now()->subDays(2)->setHour(10),
                 'date_fin' => now()->subDays(2)->setHour(12),
                 'motif' => 'Présentation de projet'
             ]
-        ]);
-    @endphp
+        ]);*/
+    -->
 
     <!-- Statistiques -->
     <div class="reservations-stats-grid">

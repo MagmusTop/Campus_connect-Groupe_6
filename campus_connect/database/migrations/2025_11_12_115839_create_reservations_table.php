@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users'); // id de l'utilisateur qui fait la réservation
             $table->foreignId('salle_id')->nullable()->constrained('salles')->onDelete('cascade');
             $table->foreignId('equipement_id')->nullable()->constrained('equipements')->onDelete('cascade');
             $table->text('motif')->nullable();

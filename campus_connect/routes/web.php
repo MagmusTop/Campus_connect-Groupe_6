@@ -22,51 +22,51 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
 });
 
-Route::prefix('salles')->group(function () {
-    Route::get('/', [SalleController::class, 'index'])->name('salles.index');
-    Route::get('/{salle}', [SalleController::class, 'show'])->name('salles.show');
-    Route::get('/create', [SalleController::class, 'create'])->name('salles.create');
-    Route::get('/{salle}/edit', [SalleController::class, 'edit'])->name('salles.edit');
-    Route::post('/', [SalleController::class, 'store'])->name('salles.store');
-    Route::put('/{salle}', [SalleController::class, 'update'])->name('salles.update');
-    Route::delete('/{salle}', [SalleController::class, 'destroy'])->name('salles.destroy');
+Route::prefix('salles')->name('salles.')->group(function () {
+    Route::get('/', [SalleController::class, 'index'])->name('index');
+    Route::get('/{salle}', [SalleController::class, 'show'])->name('show');
+    Route::get('/create', [SalleController::class, 'create'])->name('create');
+    Route::get('/{salle}/edit', [SalleController::class, 'edit'])->name('edit');
+    Route::post('/', [SalleController::class, 'store'])->name('store');
+    Route::put('/{salle}', [SalleController::class, 'update'])->name('update');
+    Route::delete('/{salle}', [SalleController::class, 'destroy'])->name('destroy');
 });
 
-Route::prefix('reservations')->group(function () {
-    Route::get('/', [CategorieController::class, 'index'])->name('reservations.index');
-    Route::get('/{reservation}', [CategorieController::class, 'show'])->name('reservations.show');
-    Route::get('/create', [CategorieController::class, 'create'])->name('reservations.create');
-    Route::get('/{reservation}/edit', [CategorieController::class, 'edit'])->name('reservations.edit');
-    Route::post('/', [CategorieController::class, 'store'])->name('reservations.store');
-    Route::put('/{reservation}', [CategorieController::class, 'update'])->name('reservations.update');
-    Route::delete('/{reservation}', [CategorieController::class, 'destroy'])->name('reservations.destroy');
+Route::prefix('reservations')->name('reservations.')->group(function () {
+    Route::get('/', [ReservationController::class, 'index'])->name('index');
+    Route::get('/{reservation}', [ReservationController::class, 'show'])->name('show');
+    Route::get('/create', [ReservationController::class, 'index'])->name('create');
+    Route::get('/{reservation}/edit', [ReservationController::class, 'edit'])->name('edit');
+    Route::post('/', [ReservationController::class, 'store'])->name('store');
+    Route::put('/{reservation}', [ReservationController::class, 'update'])->name('update');
+    Route::delete('/{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
 });
 
-Route::prefix('equipements')->group(function () {
-    Route::get('/', [EquipementController::class, 'index'])->name('equipements.index');
-    Route::get('/{equipement}', [EquipementController::class, 'show'])->name('equipements.show');
-    Route::get('/create', [EquipementController::class, 'create'])->name('equipements.create');
-    Route::get('/{equipement}/edit', [EquipementController::class, 'edit'])->name('equipements.edit');
-    Route::post('/', [EquipementController::class, 'store'])->name('equipements.store');
-    Route::put('/{equipement}', [EquipementController::class, 'update'])->name('equipements.update');
-    Route::delete('/{equipement}', [EquipementController::class, 'destroy'])->name('equipements.destroy');
+Route::prefix('equipements')->name('equipements.')->group(function () {
+    Route::get('/', [EquipementController::class, 'index'])->name('index');
+    Route::get('/{equipement}', [EquipementController::class, 'show'])->name('show');
+    Route::get('/create', [EquipementController::class, 'create'])->name('create');
+    Route::get('/{equipement}/edit', [EquipementController::class, 'edit'])->name('edit');
+    Route::post('/', [EquipementController::class, 'store'])->name('store');
+    Route::put('/{equipement}', [EquipementController::class, 'update'])->name('update');
+    Route::delete('/{equipement}', [EquipementController::class, 'destroy'])->name('destroy');
 });
 
-Route::prefix('annonces')->group(function () {
-    Route::get('/', [AnnonceController::class, 'index'])->name('annonces.index');
-    Route::get('/{annonce}', [AnnonceController::class, 'show'])->name('annonces.show');
-    Route::get('/create', [AnnonceController::class, 'create'])->name('annonces.create');
-    Route::get('/{annonce}/edit', [AnnonceController::class, 'edit'])->name('annonces.edit');
-    Route::post('/', [AnnonceController::class, 'store'])->name('annonces.store');
-    Route::put('/{annonce}', [AnnonceController::class, 'update'])->name('annonces.update');
-    Route::delete('/{annonce}', [AnnonceController::class, 'destroy'])->name('annonces.destroy');
+Route::prefix('annonces')->name('annonces.')->group(function () {
+    Route::get('/', [AnnonceController::class, 'index'])->name('index');
+    Route::get('/{annonce}', [AnnonceController::class, 'show'])->name('show');
+    Route::get('/create', [AnnonceController::class, 'create'])->name('create');
+    Route::get('/{annonce}/edit', [AnnonceController::class, 'edit'])->name('edit');
+    Route::post('/', [AnnonceController::class, 'store'])->name('store');
+    Route::put('/{annonce}', [AnnonceController::class, 'update'])->name('update');
+    Route::delete('/{annonce}', [AnnonceController::class, 'destroy'])->name('destroy');
 });
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ReservationController extends Controller
 {
@@ -23,6 +24,7 @@ class ReservationController extends Controller
     public function create()
     {
         //
+        return view('reservations.create');
     }
 
     /**
@@ -31,6 +33,13 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'salle_id' => 'required|exists:salles,id',
+            'date_reservation' => 'required|date',
+            'heure_debut' => 'required|date_format:H:i',
+            'heure_fin' => 'required|date_format:H:i|after:heure_debut',
+            'motif' => 'nullable|string|max:255',
+        ]);
     }
 
     /**
