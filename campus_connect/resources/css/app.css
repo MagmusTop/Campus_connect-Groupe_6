@@ -1,3 +1,526 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+        /* VOTRE CSS EXISTANT - inchangé */
+        :root {
+            --primary: #111827;
+            --text: #111827;
+            --text-secondary: #4b5563;
+            --bg: #ffffff;
+            --sidebar: rgba(255,255,255,0.9);
+            --border: rgba(0,0,0,0.1);
+            --hover-light: rgba(0,0,0,0.08);
+            --blur-bg: blur(14px) saturate(180%);
+        }
+
+        [data-bs-theme="dark"] {
+            --primary: #f9fafb;
+            --text: #f9fafb;
+            --text-secondary: #d1d5db;
+            --bg: #0f0f0f;
+            --sidebar: rgba(25,25,25,0.7);
+            --border: rgba(255,255,255,0.05);
+            --hover-dark: rgba(255,255,255,0.15);
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        .navbar {
+            background: var(--sidebar);
+            backdrop-filter: var(--blur-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--text);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .navbar-nav {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1.2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item {
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+            opacity: 1;
+        }
+
+        [data-bs-theme="light"] .nav-link:hover {
+            color: var(--primary);
+            background: var(--hover-light);
+        }
+
+        [data-bs-theme="dark"] .nav-link:hover {
+            color: var(--primary);
+            background: var(--hover-dark);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        [data-bs-theme="light"] .theme-toggle i {
+            color: #111827;
+        }
+
+        [data-bs-theme="dark"] .theme-toggle i {
+            color: #f9fafb;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(20deg);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            background: var(--sidebar);
+            backdrop-filter: var(--blur-bg);
+            border-top: 1px solid var(--border);
+            padding: 1rem 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        @keyframes fadeInUp {
+            from {opacity: 0; transform: translateY(10px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+            /* Boutons personnalisés pour le thème */
+    .btn-custom {
+        background: var(--text);
+        color: var(--bg);
+        border: none;
+        border-radius: 10px;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+        transition: all 0.25s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-custom:hover {
+        background: var(--text-secondary);
+        color: var(--bg);
+        transform: translateY(-2px);
+    }
+
+    /* Thème clair : bouton noir sur fond blanc */
+    [data-bs-theme="light"] .btn-custom {
+        background: #111827; /* Noir */
+        color: #ffffff; /* Blanc */
+    }
+
+    [data-bs-theme="light"] .btn-custom:hover {
+        background: #4b5563; /* Gris foncé */
+        color: #ffffff;
+    }
+
+    /* Thème sombre : bouton blanc sur fond noir */
+    [data-bs-theme="dark"] .btn-custom {
+        background: #f9fafb; /* Blanc */
+        color: #111827; /* Noir */
+    }
+
+    [data-bs-theme="dark"] .btn-custom:hover {
+        background: #d1d5db; /* Gris clair */
+        color: #111827;
+    }
+
+    .align-center-cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(65vh - 100px); /* Ajustez selon votre header/footer */
+    }
+
+    .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+    }
+
+   
+/* === COMPOSANTS SPÉCIFIQUES AUX RÉSERVATIONS === */
+/* Toutes les classes sont préfixées pour éviter les conflits */
+
+/* Scope spécifique pour la page réservations */
+
+
+.reservations-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.reservations-page-header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+}
+
+.reservations-page-subtitle {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.reservations-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.reservations-stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s ease;
+}
+
+.reservations-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.reservations-stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.reservations-total { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
+.reservations-confirmed { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.reservations-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.reservations-rejected { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+.reservations-stat-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text);
+}
+
+.reservations-stat-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.reservations-quick-nav {
+    margin-bottom: 2rem;
+}
+
+.reservations-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.reservations-nav-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s ease;
+}
+
+.reservations-nav-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+    text-decoration: none;
+    color: var(--text);
+}
+
+.reservations-nav-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.reservations-nav-content h4 {
+    margin: 0 0 0.25rem 0;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.reservations-nav-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.reservations-arrow {
+    margin-left: auto;
+    color: var(--text-secondary);
+    transition: transform 0.2s ease;
+    font-size: 0.8rem;
+}
+
+.reservations-nav-item:hover .reservations-arrow {
+    transform: translateX(3px);
+    color: var(--primary);
+}
+
+.reservations-section {
+    margin-bottom: 2rem;
+}
+
+.reservations-section-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.reservations-section-header h3 {
+    color: var(--text);
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.reservations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.reservations-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.reservations-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.reservations-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.reservations-resource {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+}
+
+.reservations-resource-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.reservations-resource-info h4 {
+    margin: 0 0 0.25rem 0;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 1.1rem;
+}
+
+.reservations-resource-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.reservations-status {
+    margin-left: auto;
+}
+
+.reservations-status-badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.reservations-validée { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.reservations-en_attente { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.reservations-rejetée { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+.reservations-time {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.reservations-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.reservations-empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.reservations-empty-icon {
+    font-size: 3rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.reservations-empty-state h3 {
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.reservations-empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reservations-page-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .reservations-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .reservations-nav-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .reservations-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .reservations-status {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+}
