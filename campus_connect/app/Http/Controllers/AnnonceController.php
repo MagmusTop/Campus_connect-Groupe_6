@@ -13,6 +13,9 @@ class AnnonceController extends Controller
     public function index()
     {
         //
+        $annonces = Annonce::all();
+        
+        return view('annonces.index', compact('annonces'));
     }
 
     /**

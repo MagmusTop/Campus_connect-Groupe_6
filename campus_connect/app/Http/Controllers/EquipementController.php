@@ -13,6 +13,8 @@ class EquipementController extends Controller
     public function index()
     {
         //
+        $equipements = Equipement::all();
+        return view('equipements.index', compact('equipements'));
     }
 
     /**

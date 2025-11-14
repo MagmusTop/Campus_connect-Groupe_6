@@ -98,7 +98,7 @@
                 </div>
                 <i class="fas fa-chevron-right reservations-arrow"></i>
             </a>
-            <a href="{{ route('materiel.index') }}" class="reservations-nav-item">
+            <a href="{{ route('equipements.index') }}" class="reservations-nav-item">
                 <div class="reservations-nav-icon">
                     <i class="fas fa-laptop"></i>
                 </div>

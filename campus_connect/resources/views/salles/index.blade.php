@@ -46,7 +46,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="{{ route('materiel.index') }}" class="card text-decoration-none h-100 card-hover">
+            <a href="{{ route('equipements.index') }}" class="card text-decoration-none h-100 card-hover">
                 <div class="card-body text-center p-3">
                     <i class="fas fa-laptop text-info fa-2x mb-2"></i>
                     <h6 class="card-title mb-1">Matériel</h6>

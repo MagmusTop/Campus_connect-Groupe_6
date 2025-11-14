@@ -13,8 +13,9 @@ class SalleController extends Controller
     public function index()
     {
         //
-        Salle::all();
-        
+        $salles = Salle::all();
+
+        return view('salles.index', compact('salles'));
     }
 
     /**
