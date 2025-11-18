@@ -1,6 +1,5 @@
 {
-  "name": "Campus Connect Dev",
-  "dockerFile": "Dockerfile",
-  "context": ".",
-  "remoteUser": "node"
+  "name": "Recovery devcontainer",
+  "image": "mcr.microsoft.com/devcontainers/universal:latest",
+  "remoteUser": "root"
 }
