@@ -202,7 +202,7 @@
         </dia:composite>
         <dia:composite type="table_attribute">
           <dia:attribute name="name">
-            <dia:string>#category_id#</dia:string>
+            <dia:string>#Categorie_id#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#int#</dia:string>
@@ -932,7 +932,7 @@
         </dia:composite>
         <dia:composite type="table_attribute">
           <dia:attribute name="name">
-            <dia:string>#category_id#</dia:string>
+            <dia:string>#Categorie_id#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#foreignId#</dia:string>

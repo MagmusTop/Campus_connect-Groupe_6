@@ -73,7 +73,7 @@
                         </div>
                         
                         <p class="card-text text-muted mb-2">
-                            <i class="fas fa-tag me-2"></i>{{ $equipement->categorie->name ?? 'Non catégorisé' }}
+                            <i class="fas fa-tag me-2"></i>{{ $equipement->categorie->nom ?? 'Non catégorisé' }}
                         </p>
                         
                         <p class="card-text small">{{ Str::limit($equipement->description, 120) }}</p>

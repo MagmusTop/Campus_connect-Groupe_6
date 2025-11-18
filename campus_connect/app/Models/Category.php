@@ -4,10 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Categorie extends Model
+/**
+ * @property mixed $nom
+ * @property mixed $type
+ */
+
+class Category extends Model
 {
+    //
     protected $fillable = [
         'nom',
+        'type'
     ];
 
     public function annonces()
@@ -20,4 +27,3 @@ class Categorie extends Model
         return $this->hasMany(Equipement::class);
     }
 }
-

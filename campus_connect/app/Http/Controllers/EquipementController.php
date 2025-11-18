@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorie;
+use App\Models\Category;
 use App\Models\Equipement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EquipementController extends Controller
 {
@@ -15,6 +16,11 @@ class EquipementController extends Controller
     {
         //
         $equipements = Equipement::all();
+        foreach( $equipements as $equipement){
+            $categoy= Category::where('id',$equipement->Categorie_id)->first();
+    
+            $equipement->categorie=$categoy;
+        }
         return view('equipements.index', compact('equipements'));
     }
 
@@ -24,32 +30,7 @@ class EquipementController extends Controller
     public function create()
     {
         //
-        $categories = collect([
-            (object)[
-                'id' => 1,
-                'nom' => 'Vidéoprojecteur HD',
-                'quantite' => 8,
-                'description' => 'Vidéoprojecteur haute définition 1080p avec entrées HDMI et VGA',
-                'categorie' => (object)['name' => 'Audiovisuel'],
-                'reservations' => collect()
-            ],
-            (object)[
-                'id' => 2,
-                'nom' => 'Ordinateur Portable',
-                'quantite' => 15,
-                'description' => 'PC Portable Dell Latitude pour présentations et travaux pratiques',
-                'categorie' => (object)['name' => 'Informatique'],
-                'reservations' => collect()
-            ],
-            (object)[
-                'id' => 3,
-                'nom' => 'Tablette Graphique',
-                'quantite' => 5,
-                'description' => 'Tablettes Wacom Intuos pour cours de design et infographie',
-                'categorie' => (object)['name' => 'Informatique'],
-                'reservations' => collect()
-            ]
-        ]);
+        $categories = Category::where('type', 'equipement')->get();
         return view('equipements.create', compact('categories'));
     }
 
@@ -59,6 +40,44 @@ class EquipementController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'nom' => ['required', 'string', 'max:255'],
+            'quantite' => ['required', 'integer', 'max:255'],
+            'description' => '',
+            'categorie' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+        $categorieInput = $request->input('categorie');
+
+        // Si c'est un entier -> chercher par id
+        if (is_numeric($categorieInput)) {
+            $category = Category::find($categorieInput);
+        } else {
+            // si c'est une string -> chercher par nom ou créer
+            if (Category::where('nom', $categorieInput)->where('type','equipement')->exists()) {
+                $category = Category::where('nom', $categorieInput)->where('type','equipement')->first();
+            } else {
+            $category = Category::Create(['nom' => $categorieInput,'type'=>'equipement']);
+            }
+        }
+
+        if ($request->input('description')) {
+            $description = $request->input('description');
+        } else {
+            $description = null;
+        }
+
+        // Créer l'équipement en liant l'id de la catégorie trouvée/créée
+        $equipement = new Equipement;
+        $equipement->nom = $request->nom;
+        $equipement->quantite = $request->quantite;
+        $equipement->description = $description;
+        $equipement->categorie()->associate($category);
+        $equipement->save();
+        return redirect()->route('equipements.index')->with('success', 'Matériel créé avec succès!'); 
     }
 
     /**
@@ -67,6 +86,10 @@ class EquipementController extends Controller
     public function show(Equipement $equipement)
     {
         //
+        $equipement = Equipement::find($equipement->id);
+        $categoy= Category::where('id',$equipement->Categorie_id)->first();
+        $equipement->categorie=$categoy;
+        return view('equipements.show', compact('equipement'));
     }
 
     /**

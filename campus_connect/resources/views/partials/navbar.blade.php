@@ -1,5 +1,5 @@
 <nav class="navbar">
-    <a class="navbar-brand" href="{{ route('home') }}">
+    <a class="navbar-brand" href="{{ route('welcome') }}">
         <i class="fa-solid fa-graduation-cap me-2"></i>CampusConnect
     </a>
     <ul class="navbar-nav">

@@ -3,16 +3,15 @@
 @section('title', 'Nouvelle réservation')
 
 @section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-plus me-2"></i>Nouvelle réservation</h4>
+            </div>
+      
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="card">

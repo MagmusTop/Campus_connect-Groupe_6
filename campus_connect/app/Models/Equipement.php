@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Equipement extends Model
 {
     protected $fillable = [
-        'nom', 
-        'categorie', 
-        'etat', 
+        'nom',
+        'quantite', 
         'description', 
-        'category_id'
+        'Categorie_id'
     ];
 
     public function reservations()
@@ -21,6 +20,6 @@ class Equipement extends Model
 
     public function categorie()
     {
-        return $this->belongsTo(Categorie::class);
+        return $this->belongsTo(Category::class);
     }
 }

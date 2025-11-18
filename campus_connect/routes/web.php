@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\SalleController;
-use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\EquipementController;
@@ -21,7 +21,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/accueil', function () {
         return view('home');
-    });
+    })->name('home');
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('update');

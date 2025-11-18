@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 // Page d'accueil
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
+})->name('welcome');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Annonce;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AnnonceController extends Controller
 {
@@ -14,7 +16,11 @@ class AnnonceController extends Controller
     {
         //
         $annonces = Annonce::all();
-        
+        foreach( $annonces as $annonce){
+            $categoy= Category::where('id',$equipement->Categorie_id)->first();
+    
+            $annonce->categorie=$categoy;
+        }
         return view('annonces.index', compact('annonces'));
     }
 
@@ -24,6 +30,9 @@ class AnnonceController extends Controller
     public function create()
     {
         //
+        $categories = Category::where('type', 'annonce')->get();
+
+        return view('annonces.create', compact('categories'));
     }
 
     /**
@@ -32,6 +41,47 @@ class AnnonceController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'titre' => ['required', 'string', 'max:255'],
+            'categorie' => 'required',
+            'contenu' => ['required', 'string'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+        $categorieInput = $request->input('categorie');
+
+        // Si c'est un entier -> chercher par id
+        if (is_numeric($categorieInput)) {
+            $category = Category::find($categorieInput);
+        } else {
+            // si c'est une string -> chercher par nom ou créer
+            if (Category::where('nom', $categorieInput)->where('type','equipement')->exists()) {
+                $category = Category::where('nom', $categorieInput)->where('type','annonce')->first();
+            } else {
+            $category = Category::Create(['nom' => $categorieInput,'type'=>'annonce']);
+            }
+        }
+
+        if (! $category) {
+            return back()->withErrors(['categorie' => 'Catégorie invalide'])->withInput();
+        }
+
+        if ($request->input('description')) {
+            $description = $request->input('description');
+        } else {
+            $description = null;
+        }
+
+        // Créer l'équipement en liant l'id de la catégorie trouvée/créée
+        $annonce = new Annonce;
+        $annonce->titre = $request->titre;
+        $annonce->user_id = $request->user()->id;
+        $annonce->contenu = $request->contenu;
+        $annonce->categorie()->associate($category);
+        $annonce->save();
+        return redirect()->route('annonces.index')->with('success', 'annonce créé avec succès!'); 
     }
 
     /**

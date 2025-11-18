@@ -8,9 +8,10 @@ class Annonce extends Model
 {
     protected $fillable = [
         'titre', 
+        'type',
         'contenu', 
         'user_id', 
-        'category_id'
+        'Categorie_id'
     ];
 
     public function auteur()
@@ -20,6 +21,6 @@ class Annonce extends Model
 
     public function categorie()
     {
-        return $this->belongsTo(Categorie::class);
+        return $this->belongsTo(Category::class);
     }
 }

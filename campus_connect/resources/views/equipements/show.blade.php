@@ -15,7 +15,7 @@
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <p><strong><i class="fas fa-tag me-2"></i>Catégorie :</strong></p>
-                            <p class="text-muted">{{ $equipement->categorie->name ?? 'Non catégorisé' }}</p>
+                            <p class="text-muted">{{ $equipement->categorie->nom ?? 'Non catégorisé' }}</p>
                         </div>
                         <div class="col-md-6">
                             <p><strong><i class="fas fa-boxes me-2"></i>Quantité disponible :</strong></p>

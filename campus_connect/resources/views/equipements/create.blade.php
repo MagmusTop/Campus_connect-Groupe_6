@@ -3,11 +3,13 @@
 @section('content')
 
 <style>
+/* Container */
 .dropdown-search {
     position: relative;
     width: 100%;
 }
 
+/* Input */
 .search-input {
     width: 100%;
     padding: 10px 35px 10px 10px;
@@ -17,13 +19,13 @@
     box-sizing: border-box;
     cursor: pointer;
 }
-
 .search-input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
+/* Arrow */
 .dropdown-arrow {
     position: absolute;
     right: 10px;
@@ -33,11 +35,11 @@
     color: #666;
     transition: transform 0.3s;
 }
-
 .dropdown-arrow.open {
     transform: translateY(-50%) rotate(180deg);
 }
 
+/* List */
 .dropdown-list {
     position: absolute;
     top: 100%;
@@ -50,40 +52,38 @@
     overflow-y: auto;
     display: none;
     z-index: 1000;
+    background-color: #212529;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .dropdown-list.show {
     display: block;
 }
 
+/* Items */
 .dropdown-item {
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.2s;
 }
-
 .dropdown-item:hover {
     background-color: #2067d1ff;
     color: #78adfcff;
 }
-
 .dropdown-item.selected {
     background-color: #78adfcff;
     color: #007bff;
 }
-
 .dropdown-item.create-new {
     background-color: #f0f8ff;
     color: #007bff;
     font-weight: bold;
     border-top: 2px solid #007bff;
 }
-
 .dropdown-item.create-new:hover {
     background-color: #e0f0ff;
 }
 
+/* No results */
 .no-results {
     padding: 10px;
     text-align: center;
@@ -91,7 +91,7 @@
     font-style: italic;
 }
 
-/* Cache le select original */
+/* Hidden select sent to server */
 .hidden-select {
     display: none;
 }
@@ -114,17 +114,22 @@
                                     <input type="text" class="form-control" id="nom" name="nom" required>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3 form-group">
-                                    <label for="materiels_category_id" class="form-label">Catégorie </label>
+                                    <label for="categorie_id" class="form-label">Catégorie *</label>
                                     <div class="dropdown-search">
                                         <input type="text" class="form-control search-input" id="search-input" placeholder="Sélectionnez une catégorie" autocomplete="off">
                                         <span class="dropdown-arrow">▼</span>
-                                        <div class="dropdown-list" id="dropdown-list">
-                                        <select class="hidden-select form-control dr-my-select" id="materiels_category_id" name="materiels_category_id" required>
-                                            <option value=""> Sélectionnez une catégorie </option>
+
+                                        <!-- Liste rendue dynamiquement -->
+                                        <div class="dropdown-list" id="dropdown-list"></div>
+                                        <!-- Select caché (valeur envoyée au serveur) -->
+                                        <select class="hidden-select form-control dr-my-select" id="categorie_id" name="categorie" required>
+                                            <option value="">Sélectionnez une catégorie</option>
                                         </select>
-                                        </div>
+                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +139,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="quantite" class="form-label">Quantité *</label>
-                                    <input type="number" class="form-control" id="quantite" name="quantite" min="0" required>
+                                    <input type="number" class="form-control" id="quantite" name="quantite" min="0" default="0" required>
                                 </div>
                             </div>
                         </div>
@@ -159,152 +164,177 @@
     </div>
 </div>
 
-
 <script>
-    // Données de catégories (remplacez par vos données PHP)
+    // Précharger les catégories depuis Blade
     let categories = [];
     @foreach($categories as $categorie)
-        categories.push({ id: {{ $categorie->id }}, nom: "{{ $categorie->nom }}" });
+        categories.push({ id: {{ $categorie->id }}, nom: @json($categorie->nom) });
     @endforeach
 
-    const searchInput = document.getElementById('search-input');
-    const dropdownList = document.getElementById('dropdown-list');
+    const searchInput   = document.getElementById('search-input');
+    const dropdownList  = document.getElementById('dropdown-list');
     const dropdownArrow = document.querySelector('.dropdown-arrow');
-    const hiddenSelect = document.getElementById('materiels_category_id');
-    const selectedValue = document.getElementById('selected-value');
-    const selectedText = document.getElementById('selected-text');
-    const selectedId = document.getElementById('selected-id');
+    const hiddenSelect  = document.getElementById('categorie_id');
 
     let selectedCategory = null;
 
-    // Initialiser le select caché avec les options
+    // Init du select caché
     function initializeSelect() {
         hiddenSelect.innerHTML = '<option value="">Sélectionnez une catégorie</option>';
-        categories.forEach(cat => {
+        for (const cat of categories) {
             const option = document.createElement('option');
-            option.value = cat.id;
+            option.value = String(cat.id);
             option.textContent = cat.nom;
             hiddenSelect.appendChild(option);
-        });
+        }
     }
 
-    // Afficher les options filtrées
+    // Rendu de la liste filtrée
     function renderDropdown(filter = '') {
-        const filterLower = filter.toLowerCase();
-        const filtered = categories.filter(cat =>
-        cat.nom.toLowerCase().includes(filterLower)
-        );
+        const filterLower = filter.trim().toLowerCase();
+        const filtered = categories.filter(c => c.nom.toLowerCase().includes(filterLower));
 
         dropdownList.innerHTML = '';
 
-        if (filtered.length === 0 && filter) {
-            // Option pour créer une nouvelle catégorie
+        if (filtered.length === 0 && filterLower) {
             const createItem = document.createElement('div');
             createItem.className = 'dropdown-item create-new';
-            createItem.innerHTML = `"<strong>${filter}</strong>"`;
-            createItem.onclick = () => createNewCategory(filter);
+            createItem.innerHTML = ` <strong>${escapeHtml(filter)}</strong>`;
+            createItem.onclick = () => createNewCategory(filter.trim());
             dropdownList.appendChild(createItem);
-        } else if (filtered.length === 0) {
+            return;
+        }
+
+        if (filtered.length === 0) {
             const noResults = document.createElement('div');
             noResults.className = 'no-results';
             noResults.textContent = 'Aucune catégorie trouvée';
             dropdownList.appendChild(noResults);
-        } else {
-            filtered.forEach(cat => {
-                const item = document.createElement('div');
-                item.className = 'dropdown-item';
-            if (selectedCategory && selectedCategory.id === cat.id) {
-                item.classList.add('selected');
-            }
+            return;
+        }
+
+        for (const cat of filtered) {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            if (selectedCategory && selectedCategory.id === cat.id) item.classList.add('selected');
             item.textContent = cat.nom;
             item.onclick = () => selectCategory(cat);
             dropdownList.appendChild(item);
-            });
+        }
 
-            // Ajouter l'option de création si du texte est saisi
-            if (filter && !filtered.some(cat => cat.nom.toLowerCase() === filterLower)) {
-                const createItem = document.createElement('div');
-                createItem.className = 'dropdown-item create-new';
-                createItem.innerHTML = ` "<strong>${filter}</strong>"`;
-                createItem.onclick = () => createNewCategory(filter);
-                dropdownList.appendChild(createItem);
-            }
+        // Proposer création si saisie ne correspond pas exactement
+        if (filterLower && !filtered.some(c => c.nom.toLowerCase() === filterLower)) {
+            const createItem = document.createElement('div');
+            createItem.className = 'dropdown-item create-new';
+            createItem.innerHTML = ` <strong>${escapeHtml(filter)}</strong>`;
+            createItem.onclick = () => createNewCategory(filter.trim());
+            dropdownList.appendChild(createItem);
         }
     }
 
-    // Sélectionner une catégorie
-    function selectCategory(category) {
-        selectedCategory = category;
-        searchInput.value = category.nom;
-        hiddenSelect.value = category.id;
-        closeDropdown();
+    // Sélection d'une catégorie existante
+// Sélection d'une catégorie : si useNameAsValue true -> hiddenSelect.value = nom
+function selectCategory(category, useNameAsValue = false) {
+    selectedCategory = category;
+    searchInput.value = category.nom;
 
-        // Afficher le résultat
-        selectedText.textContent = category.nom;
-        selectedId.textContent = category.id;
-        selectedValue.style.display = 'block';
+    if (useNameAsValue) {
+        hiddenSelect.value = category.nom;
+    } else {
+        hiddenSelect.value = category.id ? String(category.id) : category.nom;
     }
 
-    // Créer une nouvelle catégorie
-    function createNewCategory(nom) {
-        const newId = Math.max(...categories.map(c => c.id)) + 1;
-        const newCategory = { id: newId, nom: nom };
+    closeDropdown();
+}
 
-        categories.push(newCategory);
+    // Création d'une catégorie côté serveur, puis sélection
+// Ajoute une nouvelle option locale dont value = nom et sélectionne cette option
+function createNewCategoryLocal(nom) {
+    const returnedName = nom.trim();
+    if (!returnedName) return;
 
-        // Ajouter l'option au select caché
+    // Vérifier si une option avec cette valeur existe déjà
+    const existingOption = Array.from(hiddenSelect.options).find(o => o.value.toLowerCase() === returnedName.toLowerCase());
+    if (!existingOption) {
         const option = document.createElement('option');
-        option.value = newCategory.id;
-        option.textContent = newCategory.nom;
+        option.value = returnedName; // valeur = nom (string)
+        option.textContent = returnedName;
+        option.dataset.created = '1';
         hiddenSelect.appendChild(option);
-
-        selectCategory(newCategory);
-
-        alert(`Nouvelle catégorie "${nom}" créée avec l'ID ${newId}`);
     }
 
-    // Ouvrir/fermer le dropdown
+    // Mettre à jour le cache client (facultatif)
+    const alreadyCached = categories.some(c => c.nom.toLowerCase() === returnedName.toLowerCase());
+    if (!alreadyCached) {
+        categories.push({ id: null, nom: returnedName });
+    }
+
+    // Sélectionner la catégorie (useNameAsValue = true)
+    const category = { id: null, nom: returnedName };
+    selectCategory(category, true);
+}
+    // Toggle du dropdown
     function toggleDropdown() {
         dropdownList.classList.toggle('show');
         dropdownArrow.classList.toggle('open');
+        if (dropdownList.classList.contains('show')) renderDropdown(searchInput.value);
     }
-
+    function openDropdown() {
+        dropdownList.classList.add('show');
+        dropdownArrow.classList.add('open');
+    }
     function closeDropdown() {
         dropdownList.classList.remove('show');
         dropdownArrow.classList.remove('open');
     }
 
+    // Sécurité: échapper le HTML inséré
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
     // Événements
     searchInput.addEventListener('focus', () => {
         renderDropdown(searchInput.value);
-        dropdownList.classList.add('show');
-        dropdownArrow.classList.add('open');
+        openDropdown();
     });
 
     searchInput.addEventListener('input', (e) => {
         renderDropdown(e.target.value);
-        if (!dropdownList.classList.contains('show')) {
-            dropdownList.classList.add('show');
-            dropdownArrow.classList.add('open');
-        }
+        if (!dropdownList.classList.contains('show')) openDropdown();
+        // Si l'utilisateur modifie le texte, on invalide la sélection actuelle
+        hiddenSelect.value = '';
+        selectedCategory = null;
     });
 
     searchInput.addEventListener('click', toggleDropdown);
 
-    // Fermer le dropdown en cliquant à l'extérieur
+    // Valider Enter: si un item exact existe, sélectionner; sinon proposer création
+// Gestion de la touche Enter : si exact trouvé -> sélectionner ; sinon créer localement
+searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = searchInput.value.trim();
+        if (!val) return;
+
+        const exact = categories.find(c => c.nom.toLowerCase() === val.toLowerCase());
+        if (exact) selectCategory(exact, false);
+        else createNewCategoryLocal(val);
+    }
+});
+
+    // Fermer en cliquant à l'extérieur
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.dropdown-search')) {
             closeDropdown();
-            // Restaurer la valeur sélectionnée si aucune sélection valide
-            if (selectedCategory) {
-                searchInput.value = selectedCategory.nom;
-            } else {
-                searchInput.value = '';
-            }
+            if (!selectedCategory) searchInput.value = '';
         }
     });
 
-    // Initialiser
+    // Init
     initializeSelect();
 </script>
 

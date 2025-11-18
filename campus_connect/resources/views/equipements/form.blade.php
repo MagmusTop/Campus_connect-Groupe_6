@@ -17,20 +17,20 @@
         </div>
         <div class="col-md-6">
             <div class="mb-3">
-                <label for="materiels_category_id" class="form-label">Catégorie *</label>
+                <label for="materiels_Categorie_id" class="form-label">Catégorie *</label>
                 <div class="dropdown-search"></div>
                   <input type="text" id="search-input" placeholder="Sélectionnez une catégorie">
-                    <select class="form-control @error('materiels_category_id') is-invalid @enderror" 
-                            id="materiels_category_id" name="materiels_category_id" required>
+                    <select class="form-control @error('materiels_Categorie_id') is-invalid @enderror" 
+                            id="materiels_Categorie_id" name="materiels_Categorie_id" required>
                         @foreach($categories as $categorie)
                             <option value="{{ $categorie->id }}" 
-                                {{ old('materiels_category_id', $equipement->materiels_category_id ?? '') == $categorie->id ? 'selected' : '' }}>
+                                {{ old('materiels_Categorie_id', $equipement->materiels_Categorie_id ?? '') == $categorie->id ? 'selected' : '' }}>
                                 {{ $categorie->nom }}
                             </option>
                         @endforeach
                     </select>
                 </div>
-                @error('materiels_category_id')
+                @error('materiels_Categorie_id')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

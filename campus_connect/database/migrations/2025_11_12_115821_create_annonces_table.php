@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('annonces', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // auteur
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade'); // catégorie de l'annonce
+            $table->foreignId('Categorie_id')->constrained('categories')->onDelete('cascade'); // catégorie de l'annonce
             $table->string('titre');
             $table->text('contenu');
             $table->timestamps();
