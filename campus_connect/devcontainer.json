@@ -1,0 +1,6 @@
+{
+  "name": "Campus Connect Dev",
+  "dockerFile": "Dockerfile",
+  "context": ".",
+  "remoteUser": "node"
+}
