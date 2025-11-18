@@ -31,9 +31,14 @@
             <div class="profile-trigger">
                 <i class="fa-solid fa-user-circle fa-lg"></i>
                 <div class="logout-option">
-                    <a href="#" class="logout-link">
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <button type="submit" class="logout-link" >
                         <i class="fa-solid fa-right-from-bracket me-2"></i>Déconnexion
+                    </button>
+                    <a href="#" >
                     </a>
+                </form>
                 </div>
             </div>
         </li>

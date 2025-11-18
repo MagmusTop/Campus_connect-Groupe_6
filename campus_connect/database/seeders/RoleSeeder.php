@@ -19,13 +19,13 @@ class RoleSeeder extends Seeder
         // Example roles
         $roles = [
             [
-                'name' => 'administrateur'
+                'nom' => 'administrateur'
             ],
             [
-                'name'=> 'etudiant'
+                'nom'=> 'etudiant'
             ],
             [
-                'name'=> 'enseignant'
+                'nom'=> 'enseignant'
             ]
 
         ];

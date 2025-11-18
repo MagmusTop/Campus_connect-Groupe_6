@@ -86,7 +86,7 @@
             </a>
         </div>
         <div class="col-md-6">
-            <a href="{{ route('materiel.index') }}" class="btn btn-secondary w-100 d-flex align-items-center justify-content-center py-3">
+            <a href="{{ route('equipements.index') }}" class="btn btn-secondary w-100 d-flex align-items-center justify-content-center py-3">
                 <i class="fas fa-laptop me-2"></i> Voir le matériel
             </a>
         </div>
@@ -106,7 +106,7 @@
                 </div>
                 <i class="fas fa-chevron-right reservations-arrow"></i>
             </a>
-            <a href="{{ route('materiel.index') }}" class="reservations-nav-item">
+            <a href="{{ route('equipements.index') }}" class="reservations-nav-item">
                 <div class="reservations-nav-icon">
                     <i class="fas fa-laptop"></i>
                 </div>

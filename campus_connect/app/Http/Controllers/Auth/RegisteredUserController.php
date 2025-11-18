@@ -32,21 +32,24 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'nom' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'prenom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required|string|min:6|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*?&]/'],
-            'role' => ['string|in:etudiant,enseignant,administrateur'],
+            'password' => 'required|string|min:6|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*?&]/',
+            'role' => 'string|in:etudiant,enseignant,administrateur',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
         }
 
-        $role=Role::where('name', $request->input('role'))->first();
+        $role=Role::where('nom', $request->input('role'))->first();
 
+        if ($role === null) {
+            return redirect()->back()->withErrors(['role' => 'Rôle invalide sélectionné.']);
+        }
         $user = new User;
-        $user->nom = $request->nom;
+        $user->nom = $request->name;
         $user->prenom = $request->prenom;
         $user->role_id = $role->id;
         $user->email = $request->email;

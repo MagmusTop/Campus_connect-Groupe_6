@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 // Page d'accueil
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 })->name('home');
 
 Route::middleware('guest')->group(function () {
@@ -42,6 +42,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 
@@ -60,6 +64,4 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
 });

@@ -22,6 +22,7 @@
     @include('partials.navbar')
 
     <main>
+        @include('partials.messages')
         @yield('content')
     </main>
 

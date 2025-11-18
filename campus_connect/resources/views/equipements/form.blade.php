@@ -18,16 +18,18 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="materiels_category_id" class="form-label">Catégorie *</label>
-                <select class="form-control @error('materiels_category_id') is-invalid @enderror" 
-                        id="materiels_category_id" name="materiels_category_id" required>
-                    <option value="">Sélectionnez une catégorie</option>
-                    @foreach($categories as $categorie)
-                        <option value="{{ $categorie->id }}" 
-                            {{ old('materiels_category_id', $equipement->materiels_category_id ?? '') == $categorie->id ? 'selected' : '' }}>
-                            {{ $categorie->nom }}
-                        </option>
-                    @endforeach
-                </select>
+                <div class="dropdown-search"></div>
+                  <input type="text" id="search-input" placeholder="Sélectionnez une catégorie">
+                    <select class="form-control @error('materiels_category_id') is-invalid @enderror" 
+                            id="materiels_category_id" name="materiels_category_id" required>
+                        @foreach($categories as $categorie)
+                            <option value="{{ $categorie->id }}" 
+                                {{ old('materiels_category_id', $equipement->materiels_category_id ?? '') == $categorie->id ? 'selected' : '' }}>
+                                {{ $categorie->nom }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 @error('materiels_category_id')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -67,3 +69,15 @@
         </button>
     </div>
 </form>
+<style>
+    .dropdown-search {
+  position: relative; /* Pour positionner la liste */
+  display: inline-block;
+}
+/* Styles pour le champ de saisie */
+#search-input {
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+</style>
