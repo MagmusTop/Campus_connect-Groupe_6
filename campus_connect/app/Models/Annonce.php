@@ -10,7 +10,6 @@ class Annonce extends Model
         'titre', 
         'type',
         'contenu', 
-        'user_id', 
         'Categorie_id'
     ];
 

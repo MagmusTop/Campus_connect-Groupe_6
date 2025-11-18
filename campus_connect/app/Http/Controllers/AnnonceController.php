@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Annonce;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,11 +18,13 @@ class AnnonceController extends Controller
         //
         $annonces = Annonce::all();
         foreach( $annonces as $annonce){
-            $categoy= Category::where('id',$equipement->Categorie_id)->first();
-    
+            $categoy= Category::where('id',$annonce->Categorie_id)->first();
+            $user = User::where('id',$annonce->user_id)->first();
             $annonce->categorie=$categoy;
+            $annonce->user=$user;
         }
-        return view('annonces.index', compact('annonces'));
+        $categories = Category::where('type', 'annonce')->get();
+        return view('annonces.index', compact(['annonces','categories']));
     }
 
     /**
@@ -90,6 +93,12 @@ class AnnonceController extends Controller
     public function show(Annonce $annonce)
     {
         //
+        $annonce = Annonce::where('id', $annonce->id)->first();
+        $category = Category::where('id', $annonce->Categorie_id)->first();
+        $user = User::where('id', $annonce->user_id)->first();
+        $annonce->categorie = $category;
+        $annonce->user = $user;
+        return view('annonces.show', compact('annonce'));
     }
 
     /**
@@ -98,6 +107,11 @@ class AnnonceController extends Controller
     public function edit(Annonce $annonce)
     {
         //
+        $annonce = Annonce::where('id', $annonce->id)->first();
+        $category = Category::where('id', $annonce->Categorie_id)->first();
+        $annonce->categorie = $category;
+        $categories = Category::where('type', 'annonce')->get();
+        return view('annonces.edit', compact(['annonce','categories']));
     }
 
     /**

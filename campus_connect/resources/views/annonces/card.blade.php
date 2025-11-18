@@ -1,14 +1,14 @@
 @php
     // Données sécurisées avec valeurs par défaut
-    $annonceId = $annonce->id ?? 1;
-    $annonceTitle = $annonce->title ?? 'Titre de l\'annonce';
-    $annonceContent = $annonce->content ?? 'Contenu de l\'annonce...';
-    $userName = $annonce->user->name ?? 'Administrateur';
+    $annonceId = $annonce->id ?? 0;
+    $annonceTitle = $annonce->titre ?? 'Titre de l\'annonce';
+    $annonceContent = $annonce->contenu ?? 'Contenu de l\'annonce...';
+    $userName = $annonce->user->nom ?? 'user';
     $createdAt = $annonce->created_at ?? now()->subDays(2);
-    $categoryName = $annonce->category->name ?? 'general';
+    $categoryName = $annonce->categorie->nom ?? 'general';
     
     // Mapping des couleurs de catégories
-    $categoryColors = [
+    /*$categoryColors = [
         'examen' => 'badge-category-examen',
         'soutenance' => 'badge-category-soutenance',
         'activite' => 'badge-category-activite',
@@ -19,7 +19,7 @@
         'Examens' => 'badge-category-examen',
         'Activités' => 'badge-category-activite',
         'Maintenance' => 'badge-category-maintenance'
-    ];
+    ];*/
     
     $categoryClass = $categoryColors[$categoryName] ?? 'badge-category-general';
 @endphp

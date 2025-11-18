@@ -17,12 +17,11 @@
                     <input type="text" class="form-control" placeholder="Rechercher une annonce...">
                 </div>
                 <div class="col-md-4">
-                    <select class="form-select">
+                    <select class="form-select" >
                         <option value="">Toutes les catégories</option>
-                        <option value="examen">Examen</option>
-                        <option value="soutenance">Soutenance</option>
-                        <option value="activite">Activité</option>
-                        <option value="candidature">Appel à candidatures</option>
+                        @foreach ($categories as $categorie)
+                            <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-2">
