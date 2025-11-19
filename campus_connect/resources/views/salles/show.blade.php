@@ -47,8 +47,8 @@
                                                 <strong>{{ $reservation->user->name }}</strong>
                                                 <br>
                                                 <small class="text-muted">
-                                                    {{ $reservation->date_debut->format('d/m/Y H:i') }} - 
-                                                    {{ $reservation->date_fin->format('H:i') }}
+                                                    {{ $reservation->date_debut }} - 
+                                                    {{ $reservation->date_fin }}
                                                 </small>
                                             </div>
                                             <span class="badge bg-{{ $reservation->statut === 'validée' ? 'success' : ($reservation->statut === 'en_attente' ? 'warning' : 'danger') }}">

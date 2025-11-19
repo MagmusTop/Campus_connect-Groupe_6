@@ -65,6 +65,7 @@ class SalleController extends Controller
     public function show(Salle $salle)
     {
         //
+        return view('salles.show', compact('salle'));
     }
 
     /**
@@ -73,6 +74,7 @@ class SalleController extends Controller
     public function edit(Salle $salle)
     {
         //
+        return view('salles.form', compact('salle'));
     }
 
     /**
