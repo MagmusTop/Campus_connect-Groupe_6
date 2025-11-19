@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Salle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SalleController extends Controller
 {
@@ -24,6 +25,7 @@ class SalleController extends Controller
     public function create()
     {
         //
+        return view('salles.create');
     }
 
     /**
@@ -32,6 +34,29 @@ class SalleController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'nom' => ['required', 'string', 'max:255','unique:salles,nom'],
+            'capacite' => ['required', 'integer', 'max:255'],
+            "localisation" => 'string|max:255',
+            'description' => '',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+        $salle = new Salle();
+        $salle->nom = $request->input('nom');
+        $salle->capacite = $request->input('capacite');
+        if (!$request->has('localisation')) {
+            return redirect()->back()->withErrors('Le champ localisation est requis.');
+        }
+        $salle->localisation = $request->input('localisation');
+        if ($request->has('description')) {
+            $salle->description = $request->input('description');
+        }
+        $salle->save();
+
+        return redirect()->route('salles.index');
     }
 
     /**

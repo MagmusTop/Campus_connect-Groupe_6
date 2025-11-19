@@ -27,9 +27,13 @@ class ReservationPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user)
     {
-        return false;
+        $userRole = $user->role->nom;
+        $roles = ['administrateur', 'enseignant'];
+        return in_array($userRole, $roles)
+        ? Response::allow()
+        : Response::deny('Vous n\'avez pas la permission de créer une réservation.');
     }
 
     /**
@@ -43,9 +47,13 @@ class ReservationPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Reservation $reservation): bool
+    public function delete(User $user, Reservation $reservation)
     {
-        return false;
+        $userRole = $user->role->nom;
+        $roles = ['administrateur', 'enseignant'];
+        return in_array($userRole, $roles)
+        ? Response::allow()
+        : Response::deny('Vous n\'avez pas la permission de supprimer cette réservation.');
     }
 
     /**

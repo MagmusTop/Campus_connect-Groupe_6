@@ -6,6 +6,7 @@ use App\Models\Annonce;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class AnnonceController extends Controller
@@ -33,6 +34,10 @@ class AnnonceController extends Controller
     public function create()
     {
         //
+        $policyResponse = Gate::inspect('create', Annonce::class);
+        if ($policyResponse->denied()) {
+            return redirect()->route('annonces.index')->with('error', $policyResponse->message());
+        }
         $categories = Category::where('type', 'annonce')->get();
 
         return view('annonces.create', compact('categories'));
@@ -107,6 +112,10 @@ class AnnonceController extends Controller
     public function edit(Annonce $annonce)
     {
         //
+        $policyResponse = Gate::inspect('update', $annonce);
+        if ($policyResponse->denied()) {
+            return redirect()->route('annonces.index')->with('error', $policyResponse->message());
+        }
         $annonce = Annonce::where('id', $annonce->id)->first();
         $category = Category::where('id', $annonce->Categorie_id)->first();
         $annonce->categorie = $category;
@@ -120,6 +129,53 @@ class AnnonceController extends Controller
     public function update(Request $request, Annonce $annonce)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'titre' => [ 'string', 'max:255'],
+            'categorie' => '',
+            'contenu' => [ 'string'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+        $categorieInput = $request->input('categorie');
+
+        // Si c'est un entier -> chercher par id
+        if (is_numeric($categorieInput)) {
+            $category = Category::find($categorieInput);
+        } else {
+            // si c'est une string -> chercher par nom ou créer
+            if (Category::where('nom', $categorieInput)->where('type','equipement')->exists()) {
+                $category = Category::where('nom', $categorieInput)->where('type','annonce')->first();
+            } else {
+            $category = Category::Create(['nom' => $categorieInput,'type'=>'annonce']);
+        }
+    }
+    
+    if (! $category) {
+        return back()->withErrors(['categorie' => 'Catégorie invalide'])->withInput();
+        }
+
+        if ($request->input('description')) {
+            $description = $request->input('description');
+        } else {
+            $description = null;
+        }
+
+        // Créer l'équipement en liant l'id de la catégorie trouvée/créée
+        if ($request->titre){
+            $annonce->titre = $request->titre;
+        }
+        if ($request->description){
+            $annonce->contenu = $request->description;
+        }
+        if (!$request->categorie && $request->user()->categorie_id !== $category->id){
+            $annonce->categorie()->associate($category);
+        }
+        
+        $annonce->save();
+        return redirect()->route('annonces.index')->with('success', 'annonce créé avec succès!'); 
+        
     }
 
     /**
@@ -128,5 +184,13 @@ class AnnonceController extends Controller
     public function destroy(Annonce $annonce)
     {
         //
+        $policyResponse = Gate::inspect('delete', $annonce);
+        if ($policyResponse->denied()) {
+            return redirect()->route('annonces.index')->with('error', $policyResponse->message());
+        }   
+        if ($annonce){
+            $annonce->delete();
+            return redirect()->route('annonces.index')->with('success', 'Annonce supprimée avec succès.');
+        }
     }
 }

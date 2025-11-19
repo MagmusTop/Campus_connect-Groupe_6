@@ -30,6 +30,7 @@ class EquipementController extends Controller
     public function create()
     {
         //
+        
         $categories = Category::where('type', 'equipement')->get();
         return view('equipements.create', compact('categories'));
     }

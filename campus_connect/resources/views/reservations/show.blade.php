@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body">
                     <!-- Données factices pour le développement -->
-                    @php
+                    <!--
                         $dummyReservation = (object)[
                             'statut' => 'validée',
                             'salle_id' => 1,
@@ -25,17 +25,21 @@
                             ],
                             'user' => (object)['name' => 'Professeur Dupont']
                         ];
-                    @endphp
+                    -->
                     
                     <!-- Informations principales -->
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <strong>Type:</strong>
+                        @if(isset($dummyReservation->salle))
                             <span class="text-muted">Salle</span>
+                        @else
+                            <span class="text-muted">Matériel</span>
+                        @endif
                         </div>
                         <div class="col-md-6">
                             <strong>Réservé par:</strong>
-                            <span class="text-muted">{{ $dummyReservation->user->name }}</span>
+                            <span class="text-muted">{{ $dummyReservation->user->nom }}</span>
                         </div>
                     </div>
                     
@@ -45,44 +49,58 @@
                             <strong>Date et heure de début:</strong>
                             <br>
                             <span class="text-muted">
-                                {{ $dummyReservation->date_debut->format('d/m/Y à H:i') }}
+                                {{ $dummyReservation->date_debut }}
                             </span>
                         </div>
                         <div class="col-md-6">
                             <strong>Date et heure de fin:</strong>
                             <br>
                             <span class="text-muted">
-                                {{ $dummyReservation->date_fin->format('d/m/Y à H:i') }}
+                                {{ $dummyReservation->date_fin }}
                             </span>
                         </div>
                     </div>
-                    
-                    <!-- Ressource réservée -->
-                    <div class="mb-4">
-                        <strong>Ressource réservée:</strong>
-                        <br>
-                        <span class="text-muted fs-5">
-                            <i class="fas fa-building text-primary me-2"></i>
-                            {{ $dummyReservation->salle->nom }}
-                        </span>
-                    </div>
-                    
-                    <!-- Détails de la salle -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <strong>Capacité:</strong>
-                            <span class="text-muted">{{ $dummyReservation->salle->capacite }} places</span>
+                    @if (isset($dummyReservation->salle))
+                        <!-- Ressource réservée -->
+                        <div class="mb-4">
+                            <strong>Ressource réservée:</strong>
+                            <br>
+                            <span class="text-muted fs-5">
+                                <i class="fas fa-building text-primary me-2"></i>
+                                {{ $dummyReservation->salle->nom }}
+                            </span>
                         </div>
-                        <div class="col-md-6">
-                            <strong>Localisation:</strong>
-                            <span class="text-muted">{{ $dummyReservation->salle->localisation }}</span>
+                        
+                        <!-- Détails de la salle -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <strong>Capacité:</strong>
+                                <span class="text-muted">{{ $dummyReservation->salle->capacite }} places</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Localisation:</strong>
+                                <span class="text-muted">{{ $dummyReservation->salle->localisation }}</span>
+                            </div>
                         </div>
-                    </div>
+                    @endif
+
+                    @if (isset($dummyReservation->equipement))
+                        <!-- Ressource réservée -->
+                        <div class="mb-4">
+                            <strong>Ressource réservée:</strong>
+                            <br>
+                            <span class="text-muted fs-5">
+                                <i class="fas fa-laptop text-primary me-2"></i>
+                                {{ $dummyReservation->equipement->nom }}
+                            </span>
+                        </div>
+
+                    @endif
                     
                     <!-- Motif -->
-                    <div class="mb-4">
+                    <div class="mb-4" >
                         <strong>Motif de la réservation:</strong>
-                        <p class="text-muted mt-2 p-3 bg-light rounded">
+                        <p class="text-muted mt-2 p-3 bg-light rounded" >
                             {{ $dummyReservation->motif }}
                         </p>
                     </div>
@@ -96,4 +114,5 @@
         </div>
     </div>
 </div>
+
 @endsection

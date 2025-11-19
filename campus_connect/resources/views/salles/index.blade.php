@@ -13,16 +13,19 @@
             <h1 class="h3 mb-1"><i class="fas fa-door-open me-2"></i>Salles</h1>
             <p class="text-muted mb-0">Gérez les salles disponibles sur le campus</p>
         </div>
-        <div class="btn-group">
-            <a href="{{ route('reservations.create') }}" class="btn btn-outline-primary">
-                <i class="fas fa-calendar-plus me-1"></i>Réserver
-            </a>
-            
-            <!-- Bouton Ajouter toujours visible pour test -->
-            <a href="{{ route('salles.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i>Ajouter
-            </a>
-        </div>
+        @if (auth()->user()->isAdmin() || auth()->user()->isEnseignant())
+            <div class="btn-group">
+                <a href="{{ route('reservations.create') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-calendar-plus me-1"></i>Réserver
+                </a>
+                @if (auth()->user()->isAdmin())
+                <!-- Bouton Ajouter toujours visible pour test -->
+                <a href="{{ route('salles.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Ajouter
+                </a>
+                @endif
+            </div>
+        @endif
     </div>
 
     <!-- Messages de statut -->
@@ -90,12 +93,16 @@
                             <a href="{{ route('salles.show', $salle->id) }}" class="btn btn-outline-primary btn-sm flex-fill">
                                 <i class="fas fa-eye me-1"></i>Détails
                             </a>
-                            <a href="{{ route('reservations.create') }}" class="btn btn-success btn-sm flex-fill">
-                                <i class="fas fa-calendar-plus me-1"></i>Réserver
-                            </a>
-                            <a href="{{ route('salles.edit', $salle->id) }}" class="btn btn-outline-secondary btn-sm">
-                                <i class="fas fa-edit"></i>
-                            </a>
+                            @if (auth()->user()->isAdmin() || auth()->user()->isEnseignant())
+                                <a href="{{ route('reservations.create') }}" class="btn btn-success btn-sm flex-fill">
+                                    <i class="fas fa-calendar-plus me-1"></i>Réserver
+                                </a>
+                                @if (auth()->user()->isAdmin())
+                                    <a href="{{ route('salles.edit', $salle->id) }}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 </div>

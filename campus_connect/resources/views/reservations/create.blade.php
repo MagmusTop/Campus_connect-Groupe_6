@@ -40,10 +40,9 @@
                             <label for="salle_id" class="form-label fw-medium">Salle</label>
                             <select class="form-select" id="salle_id" name="salle_id">
                                 <option value="">Sélectionnez une salle</option>
-                                <option value="1">Amphithéâtre A</option>
-                                <option value="2">Salle 101</option>
-                                <option value="3">Salle 102</option>
-                                <option value="4">Laboratoire Informatique</option>
+                                @foreach ($salles as $salle)
+                                    <option value="{{ $salle->id }}">{{ $salle->nom }}</option>                                
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -51,13 +50,12 @@
                     <!-- Champs dynamiques pour matériel -->
                     <div id="materiel-fields" style="display: none;">
                         <div class="mb-3">
-                            <label for="materiel_id" class="form-label fw-medium">Matériel</label>
-                            <select class="form-select" id="materiel_id" name="materiel_id">
+                            <label for="equipement_id" class="form-label fw-medium">Matériel</label>
+                            <select class="form-select" id="equipement_id" name="equipement_id">
                                 <option value="">Sélectionnez du matériel</option>
-                                <option value="1">Vidéo projecteur</option>
-                                <option value="2">Ordinateur portable</option>
-                                <option value="3">Tablette graphique</option>
-                                <option value="4">Enceintes Bluetooth</option>
+                                @foreach ($equipements as $Equipement)
+                                    <option value="{{ $Equipement->id }}">{{ $Equipement->nom }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -67,7 +65,8 @@
                             <div class="mb-3">
                                 <label for="start_date" class="form-label fw-medium">Date et heure de début</label>
                                 <input type="datetime-local" class="form-control @error('start_date') is-invalid @enderror" 
-                                       id="start_date" name="start_date" value="{{ old('start_date') }}" required>
+                                       id="start_date" name="start_date" value="{{ old('start_date') }}" 
+                                       min="{{ now()->format('Y-m-d\TH:i') }}" required>
                                 @error('start_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -77,7 +76,8 @@
                             <div class="mb-3">
                                 <label for="end_date" class="form-label fw-medium">Date et heure de fin</label>
                                 <input type="datetime-local" class="form-control @error('end_date') is-invalid @enderror" 
-                                       id="end_date" name="end_date" value="{{ old('end_date') }}" required>
+                                       id="end_date" name="end_date" value="{{ old('end_date') }}" 
+                                       min="{{ now()->addMinutes(1)->format('Y-m-d\TH:i') }}" required>
                                 @error('end_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

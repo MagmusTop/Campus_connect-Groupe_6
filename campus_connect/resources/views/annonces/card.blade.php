@@ -60,24 +60,26 @@
                     <a href="{{ route('annonces.show', $annonceId) }}" class="btn btn-sm btn-custom">
                         <i class="fas fa-eye me-1"></i>Voir
                     </a>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary border-0" data-bs-toggle="dropdown">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" href="{{ route('annonces.edit', $annonceId) }}">
-                                    <i class="fas fa-edit me-2"></i>Modifier
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <button class="dropdown-item text-danger" onclick="alert('Fonctionnalité en développement')">
-                                    <i class="fas fa-trash me-2"></i>Supprimer
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+                    @if (auth()->user()->isAdmin())
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary border-0" data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('annonces.edit', $annonceId) }}">
+                                        <i class="fas fa-edit me-2"></i>Modifier
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <button class="dropdown-item text-danger" onclick="alert('Fonctionnalité en développement')">
+                                        <i class="fas fa-trash me-2"></i>Supprimer
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

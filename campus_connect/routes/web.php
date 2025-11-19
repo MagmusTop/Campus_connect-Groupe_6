@@ -69,6 +69,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{annonce}', [AnnonceController::class, 'destroy'])->name('destroy');
     });
 
+    Route::middleware('is_admin')->group(function () {
+        Route::put('/reservations/{reservation}/accepte', [ReservationController::class, 'accpteReservation'])->name('reservations.accepte');
+        Route::put('/reservations/{reservation}/refuse', [ReservationController::class, 'refuseReservation'])->name('reservations.refuse');
+    });
+
 });
 
 

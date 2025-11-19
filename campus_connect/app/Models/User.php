@@ -84,4 +84,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(Administrateur::class, 'user_id');
     }
+
+    public function isAdmin()
+    {
+        return $this->role && $this->role->nom == 'administrateur';
+    }
+
+    public function isEnseignant()
+    {
+        return $this->role && $this->role->nom == 'enseignant';
+    }
+
+    public function isEtudiant()
+    {
+        return $this->role && $this->role->nom === 'etudiant';
+    }
 }

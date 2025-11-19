@@ -8,15 +8,18 @@
             <h1 class="h3 mb-1"><i class="fas fa-laptop me-2"></i>Matériel</h1>
             <p class="text-muted mb-0">Gérez le matériel disponible sur le campus</p>
         </div>
-        <div class="btn-group">
-            <a href="{{ route('reservations.create') }}" class="btn btn-outline-primary">
-                <i class="fas fa-calendar-plus me-1"></i>Réserver
-            </a>
-            
-            <a href="{{ route('equipements.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i>Ajouter
-            </a>
-        </div>
+        @if (auth()->user()->isAdmin() || auth()->user()->isEnseignant())
+            <div class="btn-group">
+                <a href="{{ route('reservations.create') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-calendar-plus me-1"></i>Réserver
+                </a>
+                @if (auth()->user()->isAdmin())
+                <a href="{{ route('equipements.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Ajouter
+                </a>
+                @endif
+            </div>
+        @endif
     </div>
 
     <!-- Messages de statut -->
@@ -84,14 +87,19 @@
                             <a href="{{ route('equipements.show', $equipement->id) }}" class="btn btn-outline-primary btn-sm flex-fill">
                                 <i class="fas fa-eye me-1"></i>Détails
                             </a>
-                            @if($equipement->quantite > 0)
-                                <a href="{{ route('reservations.create') }}" class="btn btn-success btn-sm flex-fill">
-                                    <i class="fas fa-calendar-plus me-1"></i>Réserver
-                                </a>
-                            @else
-                                <button class="btn btn-outline-secondary btn-sm flex-fill" disabled>
-                                    <i class="fas fa-times me-1"></i>Indisponible
-                                </button>
+                            @if (auth()->user()->isAdmin() || auth()->user()->isEnseignant())
+                                @if($equipement->quantite > 0)
+                                    <a href="{{ route('reservations.create') }}" class="btn btn-success btn-sm flex-fill">
+                                        <i class="fas fa-calendar-plus me-1"></i>Réserver
+                                    </a>
+                                
+                                @else
+                                    @if(auth()->user()->isAdmin())
+                                        <button class="btn btn-outline-secondary btn-sm flex-fill" disabled>
+                                            <i class="fas fa-times me-1"></i>Indisponible
+                                        </button>
+                                    @endif
+                                @endif
                             @endif
                         </div>
                     </div>

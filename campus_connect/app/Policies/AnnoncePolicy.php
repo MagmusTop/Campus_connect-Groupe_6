@@ -8,6 +8,14 @@ use Illuminate\Auth\Access\Response;
 
 class AnnoncePolicy
 {
+    public function before(User $user, $ability)
+    {
+        // Vérifiez si l'utilisateur est un administrateur
+        
+        if ($user->isAdmin && !($ability ==='logout')) {
+            return true;
+        }
+    }
     /**
      * Determine whether the user can view any models.
      */
@@ -27,25 +35,37 @@ class AnnoncePolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user)
     {
-        return false;
+        $userRole = $user->role->nom;
+        $roles = ['administrateur', 'enseignant'];
+        return in_array($userRole, $roles)
+        ? Response::allow()
+        : Response::deny('Vous n\'avez pas la permission de créer une annonce.');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Annonce $annonce): bool
+    public function update(User $user, Annonce $annonce)
     {
-        return false;
+        $userRole = $user->role->nom;
+        $roles = ['administrateur'];
+        return in_array($userRole, $roles)
+        ? Response::allow()
+        : Response::deny('Vous n\'avez pas la permission de modifier cette annonce.');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Annonce $annonce): bool
+    public function delete(User $user, Annonce $annonce)
     {
-        return false;
+        $userRole = $user->role->nom;
+        $roles = ['administrateur'];
+        return in_array($userRole, $roles)
+        ? Response::allow()
+        : Response::deny('Vous n\'avez pas la permission de supprimer cette annonce.');
     }
 
     /**

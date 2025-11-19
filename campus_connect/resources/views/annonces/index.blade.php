@@ -4,9 +4,11 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1><i class="fas fa-bullhorn me-2"></i>Annonces</h1>
+        @if (auth()->user()->isAdmin() || auth()->user()->isEnseignant())
         <a href="{{ route('annonces.create') }}" class="btn btn-custom">
             <i class="fas fa-plus me-2"></i>Nouvelle annonce
         </a>
+        @endif
     </div>
 
     <!-- Filtres et recherche -->
