@@ -7,25 +7,16 @@
     $createdAt = $annonce->created_at ?? now()->subDays(2);
     $categoryName = $annonce->categorie->nom ?? 'general';
     
-    // Mapping des couleurs de catégories
-    /*$categoryColors = [
-        'examen' => 'badge-category-examen',
-        'soutenance' => 'badge-category-soutenance',
-        'activite' => 'badge-category-activite',
-        'candidature' => 'badge-category-candidature',
-        'general' => 'badge-category-general',
-        'maintenance' => 'badge-category-maintenance',
-        'urgent' => 'badge-category-urgent',
-        'Examens' => 'badge-category-examen',
-        'Activités' => 'badge-category-activite',
-        'Maintenance' => 'badge-category-maintenance'
-    ];*/
     
     $categoryClass = $categoryColors[$categoryName] ?? 'badge-category-general';
 @endphp
 
 <!-- Carte verticale -->
-<div class="card hover-card-gradient annonce-vertical">
+<div class="card annonce-card"
+     data-titre="{{ strtolower($annonce->titre) }}"
+     data-contenu="{{ strtolower($annonce->content) }}"
+     data-categorie="{{ $annonce->categorie_id }}">
+
     <div class="card-body">
         <div class="row align-items-start">
             <!-- Colonne principale -->

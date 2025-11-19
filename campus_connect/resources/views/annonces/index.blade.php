@@ -16,20 +16,12 @@
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Rechercher une annonce...">
+                    <input type="text" name="search" class="form-control" placeholder="Rechercher une annonce...">
                 </div>
                 <div class="col-md-4">
-                    <select class="form-select" >
-                        <option value="">Toutes les catégories</option>
-                        @foreach ($categories as $categorie)
-                            <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
-                        @endforeach
-                    </select>
                 </div>
+
                 <div class="col-md-2">
-                    <button class="btn btn-custom w-100">
-                        <i class="fas fa-filter me-2"></i>Filtrer
-                    </button>
                 </div>
             </div>
         </div>
@@ -68,6 +60,55 @@
         </div>
     @endif
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput   = document.querySelector('input[name="search"]');
+    const categorySelect = document.querySelector('select[name="categorie"]');
+    const filterButton  = document.querySelector('button');
+
+    const annonces = document.querySelectorAll('.annonce-card');
+
+    function applyFilters() {
+        const search   = (searchInput?.value || '').toLowerCase();
+        const category = categorySelect?.value || '';
+
+        annonces.forEach(card => {
+            const titre     = card.dataset.titre || '';
+            const contenu   = card.dataset.contenu || '';
+            const categorie = card.dataset.categorie || '';
+
+            let visible = true;
+
+            // Filtre texte (titre ou contenu)
+            if (search && !(titre.includes(search) || contenu.includes(search))) {
+                visible = false;
+            }
+
+            // Filtre catégorie
+            if (category && categorie !== category) {
+                visible = false;
+            }
+
+            card.style.display = visible ? '' : 'none';
+        });
+    }
+
+    // Appliquer au clic sur le bouton
+    filterButton.addEventListener('click', applyFilters);
+
+    // Appliquer en direct quand on tape
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
+
+    // Appliquer quand on change la catégorie
+    if (categorySelect) {
+        categorySelect.addEventListener('change', applyFilters);
+    }
+});
+</script>
+
 
 <style>
     .annonces-list {
