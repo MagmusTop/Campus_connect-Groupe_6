@@ -55,9 +55,38 @@ class ReservationController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
-       /* $validator->after(function ($validator) use ($request){
+        $validator->after(function ($validator) use ($request) {
+            $startDate = strtotime($request->input('start_date'));
+            $endDate = strtotime($request->input('end_date'));
+            $now = strtotime(now());
 
-        });*/
+            if ($startDate < $now) {
+                $validator->errors()->add('start_date', 'La date de début doit être dans le futur.');
+            }
+
+            if ($endDate <= $startDate) {
+                $validator->errors()->add('end_date', 'La date de fin doit être après la date de début.');
+            }
+
+            $reserv = Reservation::whhere('salle_id', $request->input('salle_id'))
+                ->orWhere('equipement_id', $request->input('equipement_id'))
+                ->where('statut', 'valide')
+                ->get();
+            if ($reserv) {
+                foreach ($reserv as $reservation) {
+                    $existingStart = strtotime($reservation->date_debut);
+                    $existingEnd = strtotime($reservation->date_fin);
+
+                    if (($startDate < $existingEnd) && ($endDate > $existingStart)) {
+                        $validator->errors()->add('start_date', 'La salle ou l\'équipement est déjà réservé pendant cette période.');
+                        break;
+                    }
+                }
+            }
+        });
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
 
         $reservation = new Reservation();
         if ($request->has('salle_id')) {
@@ -127,9 +156,12 @@ class ReservationController extends Controller
         $validator->after(function ($validator) use ($request){
             $statut = $request->input('statut');
             if ($statut !== 'valide') {
-                $validator->errors()->add('statut', 'Le statut doit être "validée" pour accepter une réservation.');
+                $validator->errors()->add('statut', 'euh...');
             }
         });
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
         $reservation->statut = 'valide';
         $reservation->save();
 
@@ -146,9 +178,12 @@ class ReservationController extends Controller
         $validator->after(function ($validator) use ($request){
             $statut = $request->input('statut');
             if ($statut !== 'rejete') {
-                $validator->errors()->add('statut', 'Le statut doit être "rejete" pour refuser une réservation.');
+                $validator->errors()->add('statut', 'euh...');
             }
         });
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
         $reservation->statut = 'rejete';
         $reservation->save();
 

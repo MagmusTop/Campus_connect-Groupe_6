@@ -77,7 +77,7 @@
                                 <label for="end_date" class="form-label fw-medium">Date et heure de fin</label>
                                 <input type="datetime-local" class="form-control @error('end_date') is-invalid @enderror" 
                                        id="end_date" name="end_date" value="{{ old('end_date') }}" 
-                                       min="{{ now()->addMinutes(1)->format('Y-m-d\TH:i') }}" required>
+                                       min="{{ now()->addMinute()->format('Y-m-d\TH:i') }}" required>
                                 @error('end_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

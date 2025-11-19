@@ -12,7 +12,7 @@ class AnnoncePolicy
     {
         // Vérifiez si l'utilisateur est un administrateur
         
-        if ($user->isAdmin && !($ability ==='logout')) {
+        if ($user->role->nom='administrateur' && !($ability ==='logout')) {
             return true;
         }
     }

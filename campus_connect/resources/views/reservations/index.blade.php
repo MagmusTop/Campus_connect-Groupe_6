@@ -206,6 +206,7 @@
                                                 </form>
                                             @endif
                                         @endif
+                                        @if(auth()->user()->can('delete', $reservation))
                                         <!-- Bouton Annuler -->
                                         <form action="{{ route('reservations.destroy', $reservation->id) }}" 
                                             method="POST" 
@@ -217,6 +218,7 @@
                                                 <i class="fas fa-ban"></i> Annuler
                                             </button>
                                         </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
