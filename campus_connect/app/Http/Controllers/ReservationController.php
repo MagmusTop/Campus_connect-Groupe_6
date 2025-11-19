@@ -89,12 +89,10 @@ class ReservationController extends Controller
             if (Salle::find($dummyReservation->salle_id)){
                 $salle = Salle::find($dummyReservation->salle_id);
                 $dummyReservation->salle = $salle;
-                $dummyReservation->equipement = null;
             }
             if (Equipement::find($dummyReservation->equipement_id)){
                 $equipement = Equipement::find($dummyReservation->equipement_id);
                 $dummyReservation->equipement = $equipement;
-                $dummyReservation->salle = null;
             }
             return view('reservations.show', compact('dummyReservation'));
         }
