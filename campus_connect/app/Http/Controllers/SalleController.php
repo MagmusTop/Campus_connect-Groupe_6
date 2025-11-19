@@ -83,6 +83,34 @@ class SalleController extends Controller
     public function update(Request $request, Salle $salle)
     {
         //
+        
+        $validator = Validator::make($request->all(), [
+            'nom' => [ 'string', 'max:255'],
+            'capacite' => [ 'integer', 'max:255'],
+            "localisation" => 'string|max:255',
+            'description' => '',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        if($request->has('nom') && $request->input('nom') !== $salle->nom){
+            $salle->nom = $request->input('nom');
+        }
+        if ($request->has('capacite') && $request->input('capacite') !== $salle->capacite) {
+        $salle->capacite = $request->input('capacite');
+        }
+       
+        if ($request->has('localisation') && $request->input('localisation') !== $salle->localisation) {
+        $salle->localisation = $request->input('localisation');
+        }
+        if ($request->has('description')    && $request->input('description') !== $salle->description) {
+            $salle->description = $request->input('description');
+        }
+        $salle->save();
+        return redirect()->route('salles.index');
+
     }
 
     /**
