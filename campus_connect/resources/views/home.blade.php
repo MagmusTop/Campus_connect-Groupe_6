@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="hero">
-    <h1>Bienvenu</h1>
+    <h1>Bienvenue</h1>
     <p>Votre portail universitaire moderne et minimaliste</p>
 </div>
 
