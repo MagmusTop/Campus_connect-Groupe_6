@@ -8,7 +8,7 @@
                 <i class="fa-solid fa-house"></i> Accueil
             </a>
         </li>
-        <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-book"></i> Formations</a></li>
+        <!--<li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-book"></i> Formations</a></li>-->
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('annonces.*') ? 'active' : '' }}" href="{{ route('annonces.index') }}">
                 <i class="fa-solid fa-bullhorn"></i> Annonces
